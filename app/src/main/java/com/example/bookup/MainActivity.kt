@@ -9,6 +9,16 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.bookup.databinding.ActivityMainBinding
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
+
+val supabase = createSupabaseClient(
+    supabaseUrl = "https://pjcbtzavgyvcxluvdosy.supabase.co",
+    supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqY2J0emF2Z3l2Y3hsdXZkb3N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NTI2NjcsImV4cCI6MjA0MjIyODY2N30.SAO_6sUFlqFchh72CPKkL1xv9y-6dUsrzVa6a8dXgFU"
+) {
+    //install(Auth)
+    install(Postgrest)
+}
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
