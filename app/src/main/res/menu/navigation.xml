@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <item android:title="@string/search">
+    <item android:title="@string/search" android:id="@+id/search">
 
     </item>
 
-    <item android:title="@string/favorite">
+    <item android:title="@string/favorite" android:id="@+id/favorite">
 
     </item>
 
-    <item android:title="@string/settings">
+    <item android:title="@string/settings" android:id="@+id/settings">
 
     </item>
 

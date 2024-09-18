@@ -41,7 +41,34 @@ class MainActivity : AppCompatActivity() {
                 .commit()
 
             navigationView.setNavigationItemSelectedListener {
-                
+                when(it.itemId){
+                    R.id.search -> {
+                        Toast.makeText(this@MainActivity, "Search", Toast.LENGTH_SHORT).show();
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, SearchFragment.newInstance())
+                            .commit()
+
+                    }
+
+                    R.id.favorite -> {
+                        Toast.makeText(this@MainActivity, "Favorite", Toast.LENGTH_SHORT).show()
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, FavoriteFragment.newInstance())
+                            .commit()
+
+                    }
+
+                    R.id.settings -> {
+                        Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.fragment_holder, SettingsFragment.newInstance())
+                            .commit()
+
+                    }
+                }
                 true
             }
         }
