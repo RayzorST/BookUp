@@ -8,13 +8,13 @@
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_width="match_parent"
+        android:layout_width="378dp"
         android:layout_height="wrap_content"
-        android:queryHint="Введите название книги"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="16dp"
-        android:queryBackground="@android:color/transparent" />
+        android:queryBackground="@android:color/transparent"
+        android:queryHint="Введите название книги" />
 
     <ListView
         android:id="@+id/booksList"

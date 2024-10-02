@@ -1,6 +1,5 @@
 package com.example.bookup
 
-import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,8 +10,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.bookup.databinding.ActivityMainBinding
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
+import android.os.Bundle
 
-val supabase = createSupabaseClient(
+public val supabase = createSupabaseClient(
     supabaseUrl = "https://pjcbtzavgyvcxluvdosy.supabase.co",
     supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqY2J0emF2Z3l2Y3hsdXZkb3N5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY2NTI2NjcsImV4cCI6MjA0MjIyODY2N30.SAO_6sUFlqFchh72CPKkL1xv9y-6dUsrzVa6a8dXgFU"
 ) {
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
             navigationView.setNavigationItemSelectedListener {
                 when(it.itemId){
                     R.id.search -> {
-                        Toast.makeText(this@MainActivity, "Search", Toast.LENGTH_SHORT).show();
                         supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.fragment_holder, SearchFragment.newInstance())
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.favorite -> {
-                        Toast.makeText(this@MainActivity, "Favorite", Toast.LENGTH_SHORT).show()
                         supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.fragment_holder, FavoriteFragment.newInstance())
@@ -61,7 +59,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     R.id.settings -> {
-                        Toast.makeText(this@MainActivity, "Settings", Toast.LENGTH_SHORT).show()
                         supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.fragment_holder, SettingsFragment.newInstance())
@@ -69,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
                     }
                 }
+                main.closeDrawers()
                 true
             }
         }
