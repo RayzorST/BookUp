@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import database.Book
 import io.github.jan.supabase.postgrest.postgrest
@@ -22,6 +23,12 @@ class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<Book
             // below line is use to add on click listener for our item of recycler view.
             holder.itemView.setOnClickListener {
 
+                val readingFragment = ReadingFragment.newInstance()
+                val fragmentManager = (it.context as MainActivity).supportFragmentManager
+                fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_holder, readingFragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         }
 

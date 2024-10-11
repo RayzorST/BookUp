@@ -24,8 +24,12 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="341dp"
+                android:layout_marginBottom="10dp"
                 android:onClick="open_menu"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
