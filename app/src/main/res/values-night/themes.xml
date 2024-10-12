@@ -3,5 +3,19 @@
     <style name="Base.Theme.BookUp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+        <item name="colorPrimary">@color/primary_dark</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:windowBackground">@color/back_dark</item>
+
     </style>
+
+    <style name="Theme.BookUp" parent="Base.Theme.BookUp" />
+
+    <style name="NavigationHeaderStyle">
+        <item name="android:background">@color/menuUp_dark</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
 </resources>

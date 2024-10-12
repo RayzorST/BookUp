@@ -4,6 +4,17 @@
     <color name="gray">#DBE2EF</color>
     <color name="light_blue">#3F72AF</color>
     <color name="blue">#112D4E</color>
-    <color name="black">#222831</color>
+    <color name="black">#000000</color>
     <color name="light_black">#393E46</color>
+
+    <color name="purple_what">#7242db</color> <!--пока не используется -->
+
+    <color name="primary_light"> #719ed1</color>
+    <color name="back_light">#FBFFEC</color>
+    <color name="menuUp_light">#80C8D0</color>
+
+    <color name="primary_dark">#3D3D6F</color>
+    <color name="back_dark">#353835</color>
+    <color name="menuUp_dark">#345255</color>
+
 </resources>
