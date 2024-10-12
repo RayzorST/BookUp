@@ -19,6 +19,14 @@
 
         <!--on below line we are creating
              a simple image view-->
+        <ToggleButton
+            android:id="@+id/addFavorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Favorite"
+            android:textOff="No"
+            android:textOn="Yes" />
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
