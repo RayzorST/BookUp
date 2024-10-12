@@ -26,9 +26,9 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             val books = supabase.postgrest["Books"].select {limit(10)}.decodeList<Book>()
-            val tags = supabase.postgrest["Book_Tags"].select{filter {
-                eq("book", books[1].id)
-            }}
+            //val tags = supabase.postgrest["Book_Tags"].select{filter {
+            //    eq("book", books[1].id)
+            //}}
             binding.booksList.layoutManager = GridLayoutManager(null, 2)
             binding.booksList.adapter = BookAdapter(books)
 

@@ -35,21 +35,21 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/buttonOnReadNext"
+                android:id="@+id/buttonOnReadBack"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
-                android:text="Next page"
+                android:text="Back page"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/buttonOnReadBack"
+                android:id="@+id/buttonOnReadNext"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="10dp"
-                android:text="Back page"
+                android:text="Next page"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

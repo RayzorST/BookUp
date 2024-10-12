@@ -1,5 +1,6 @@
 package com.example.bookup
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,15 +19,15 @@ class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<Book
         override fun onBindViewHolder(holder: BookAdapter.BookViewHolder, position: Int) {
             val book = bookList[position]
             holder.title.text = book.title
+            val bundle = Bundle()
+            bundle.putSerializable("book", book)
 
-            // below line is use to add on click listener for our item of recycler view.
             holder.itemView.setOnClickListener {
-
                 val readingFragment = ReadingFragment.newInstance()
+                readingFragment.arguments = bundle
                 val fragmentManager = (it.context as MainActivity).supportFragmentManager
                 fragmentManager.beginTransaction()
                     .replace(R.id.fragment_holder, readingFragment)
-                    .addToBackStack(null)
                     .commit()
             }
         }
