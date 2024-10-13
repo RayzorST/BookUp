@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation(libs.androidx.room.common)
+    implementation(libs.androidx.room.ktx)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation(platform("io.github.jan-tennert.supabase:bom:2.6.1"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
