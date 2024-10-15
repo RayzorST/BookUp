@@ -11,6 +11,8 @@ import com.example.bookup.databinding.ActivityMainBinding
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import com.russhwolf.settings.Settings
 
 public val supabase = createSupabaseClient(
     supabaseUrl = "https://pjcbtzavgyvcxluvdosy.supabase.co",
@@ -19,9 +21,11 @@ public val supabase = createSupabaseClient(
     //install(Auth)
     install(Postgrest)
 }
+var currentFragment: Fragment = SearchFragment.newInstance()
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,33 +39,39 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.apply {
+            pageName.text = getString(R.string.search)
             supportFragmentManager
                 .beginTransaction()
-                .replace(fragmentHolder.id, SettingsFragment.newInstance())
+                .replace(fragmentHolder.id, currentFragment)
                 .commit()
 
             navigationView.setNavigationItemSelectedListener {
                 when(it.itemId){
                     R.id.search -> {
+                        currentFragment = SearchFragment.newInstance()
+                        pageName.text = getString(R.string.search)
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(R.id.fragment_holder, SearchFragment.newInstance())
+                            .replace(R.id.fragment_holder, currentFragment)
                             .commit()
-
                     }
 
                     R.id.favorite -> {
+                        currentFragment = FavoriteFragment.newInstance()
+                        pageName.text = getString(R.string.favorite)
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(R.id.fragment_holder, FavoriteFragment.newInstance())
+                            .replace(R.id.fragment_holder, currentFragment)
                             .commit()
 
                     }
 
                     R.id.settings -> {
+                        currentFragment = SettingsFragment.newInstance()
+                        pageName.text = getString(R.string.settings)
                         supportFragmentManager
                             .beginTransaction()
-                            .replace(R.id.fragment_holder, SettingsFragment.newInstance())
+                            .replace(R.id.fragment_holder, currentFragment)
                             .commit()
 
                     }

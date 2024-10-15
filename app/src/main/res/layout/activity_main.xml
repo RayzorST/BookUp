@@ -24,12 +24,24 @@
                 android:layout_width="77dp"
                 android:layout_height="56dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="341dp"
-                android:layout_marginBottom="10dp"
                 android:onClick="open_menu"
                 android:text="MENU"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/pageName"
+                android:layout_width="226dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="40dp"
+                android:autoText="true"
+                android:text="Page"
+                android:textAlignment="center"
+                android:textSize="34sp"
+                app:autoSizeTextType="uniform"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
