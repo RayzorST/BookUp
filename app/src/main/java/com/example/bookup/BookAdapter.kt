@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import database.Book
 
@@ -30,6 +30,17 @@ class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<Book
                     .replace(R.id.fragment_holder, readingFragment)
                     .commit()
             }
+
+            holder.addFavorite.setOnCheckedChangeListener { _, isChecked ->
+                //val bookDao = localstore.bookDao()
+                if (isChecked){
+                //    bookDao.insert(Book(book.id, book.title, book.description))
+                }
+                else{
+                //    bookDao.delete(Book(book.id))
+                }
+            }
+
         }
 
         override fun getItemCount(): Int {
@@ -40,5 +51,6 @@ class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<Book
             val title: TextView = itemView.findViewById(R.id.title)
             val tags: TextView = itemView.findViewById(R.id.tags)
             val image: ImageView = itemView.findViewById(R.id.image)
+            val addFavorite: ToggleButton = itemView.findViewById(R.id.addFavorite)
         }
 }

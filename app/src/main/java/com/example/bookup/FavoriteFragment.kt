@@ -14,6 +14,10 @@ class FavoriteFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+
+    }
+
     companion object {
         @JvmStatic
         fun newInstance() = FavoriteFragment()

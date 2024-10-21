@@ -23,7 +23,6 @@ class SearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             val books = supabase.postgrest["Books"].select {limit(10)}.decodeList<Book>()
             //val tags = supabase.postgrest["Book_Tags"].select{filter {
@@ -43,6 +42,7 @@ class SearchFragment : Fragment() {
                 }
             })
         }
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

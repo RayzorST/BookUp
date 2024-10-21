@@ -12,7 +12,8 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.russhwolf.settings.Settings
+import androidx.room.Room.databaseBuilder
+import room.AppDatabase
 
 public val supabase = createSupabaseClient(
     supabaseUrl = "https://pjcbtzavgyvcxluvdosy.supabase.co",
@@ -21,6 +22,8 @@ public val supabase = createSupabaseClient(
     //install(Auth)
     install(Postgrest)
 }
+public lateinit var localstore : AppDatabase
+
 var currentFragment: Fragment = SearchFragment.newInstance()
 
 class MainActivity : AppCompatActivity() {
@@ -37,6 +40,11 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        localstore = databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "LocalStore"
+        ).build()
 
         binding.apply {
             pageName.text = getString(R.string.search)
