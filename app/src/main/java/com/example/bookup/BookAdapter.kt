@@ -10,9 +10,11 @@ import android.widget.ToggleButton
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import database.Book
+import database.BookTags
+import database.Tags
 import kotlinx.coroutines.launch
 
-class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+class BookAdapter (private var bookList: List<Book>, private  var tagBookList: List<BookTags>, private var tagList: List<Tags>) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookAdapter.BookViewHolder {
             val itemView = LayoutInflater.from(parent.context).inflate(R.layout.book_item, parent, false)
             return BookAdapter.BookViewHolder(itemView)
@@ -20,7 +22,14 @@ class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<Book
 
         override fun onBindViewHolder(holder: BookAdapter.BookViewHolder, position: Int) {
             val book = bookList[position]
+            val tags = tagBookList.filter { it.book_id == book.id }
             holder.title.text = book.title
+            var tagsString = ""
+            for (tag in tags.map{ it.tag_id }){
+                tagsString += tagList.find { it.id == tag }?.name.toString() + " "
+            }
+            holder.tags.text = tagsString
+
             val bundle = Bundle()
             bundle.putSerializable("book", book)
 

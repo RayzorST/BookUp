@@ -1,16 +1,18 @@
 package com.example.bookup
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookup.databinding.FragmentSearchBinding
 import database.Book
+import database.BookTags
+import database.Tags
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 
@@ -25,12 +27,21 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
-            val books = supabase.postgrest["Books"].select {limit(10)}.decodeList<Book>()
-            //val tags = supabase.postgrest["Book_Tags"].select{filter {
-            //    eq("book", books[1].id)
-            //}}
+            val books = supabase.postgrest["Books"].select {
+                limit(10)
+
+            }.decodeList<Book>()
+
+            val bookTags = supabase.postgrest["Book_Tags"].select {
+                filter {
+                    isIn("book_id", books.map{ it.id })
+                }
+            }.decodeList<BookTags>()
+
+            val tags = supabase.postgrest["Tags"].select {}.decodeList<Tags>()
+
             binding.booksList.layoutManager = GridLayoutManager(null, 2)
-            binding.booksList.adapter = BookAdapter(books)
+            binding.booksList.adapter = BookAdapter(books, bookTags, tags)
 
             binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {

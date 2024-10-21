@@ -25,7 +25,7 @@ class FavoriteFragment : Fragment() {
             val books = localstore.bookDao().getAll()
 
             binding.booksList.layoutManager = GridLayoutManager(null, 2)
-            binding.booksList.adapter = BookAdapter(books)
+            //binding.booksList.adapter = BookAdapter(books)
         }
     }
 

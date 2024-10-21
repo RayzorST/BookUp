@@ -21,7 +21,7 @@
     </style>
 
     <style name="NavigationStyle" parent="Widget.Design.NavigationView">
-        <item name="android:backgroundTint">@color/back_dark</item>
+        <item name="android:colorBackground">@color/back_dark</item>
         <item name="android:textColor">@color/white</item>
     </style>
 

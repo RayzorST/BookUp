@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(R.id.fragment_holder, currentFragment)
                             .commit()
-
                     }
 
                     R.id.settings -> {
@@ -82,7 +81,6 @@ class MainActivity : AppCompatActivity() {
                             .beginTransaction()
                             .replace(R.id.fragment_holder, currentFragment)
                             .commit()
-
                     }
                 }
                 main.closeDrawers()
