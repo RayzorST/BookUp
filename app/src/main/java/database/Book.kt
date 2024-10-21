@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity
+@Entity(tableName = "book")
 @kotlinx.serialization.Serializable
 data class Book (
     @PrimaryKey val id: Int = 0,

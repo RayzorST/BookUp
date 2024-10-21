@@ -14,6 +14,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.room.Room.databaseBuilder
 import room.AppDatabase
+import room.MIGRATION_1_2
 
 public val supabase = createSupabaseClient(
     supabaseUrl = "https://pjcbtzavgyvcxluvdosy.supabase.co",
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         localstore = databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "LocalStore"
-        ).build()
+        ).addMigrations(MIGRATION_1_2).build()
 
         binding.apply {
             pageName.text = getString(R.string.search)

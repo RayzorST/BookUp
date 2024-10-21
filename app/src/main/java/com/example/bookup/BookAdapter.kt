@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import database.Book
+import kotlinx.coroutines.launch
 
 class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookAdapter.BookViewHolder {
@@ -32,12 +34,12 @@ class BookAdapter (private var bookList: List<Book>) : RecyclerView.Adapter<Book
             }
 
             holder.addFavorite.setOnCheckedChangeListener { _, isChecked ->
-                //val bookDao = localstore.bookDao()
+                val bookDao = localstore.bookDao()
                 if (isChecked){
-                //    bookDao.insert(Book(book.id, book.title, book.description))
+                    bookDao.insert(Book(book.id, book.title, book.description))
                 }
                 else{
-                //    bookDao.delete(Book(book.id))
+                    bookDao.delete(Book(book.id))
                 }
             }
 
