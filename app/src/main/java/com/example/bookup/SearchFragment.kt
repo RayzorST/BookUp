@@ -14,6 +14,7 @@ import database.Book
 import database.BookTags
 import database.Tags
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
@@ -32,13 +33,22 @@ class SearchFragment : Fragment() {
 
             }.decodeList<Book>()
 
+            val bookDao = localstore.bookDao()
+            val bookRep = room.repository.Book(bookDao)
+            val favbooks = bookRep.getAll().first()
+            for(book in books){
+                if (favbooks.find { it.id == book.id } == null){
+                    book.isFavorite = false
+                }
+            }
+
             val bookTags = supabase.postgrest["Book_Tags"].select {
                 filter {
                     isIn("book_id", books.map{ it.id })
                 }
             }.decodeList<BookTags>()
 
-            val tags = supabase.postgrest["Tags"].select {}.decodeList<Tags>()
+            val tags = supabase.postgrest["Tags"].select{}.decodeList<Tags>()
 
             binding.booksList.layoutManager = GridLayoutManager(null, 2)
             binding.booksList.adapter = BookAdapter(books, bookTags, tags)

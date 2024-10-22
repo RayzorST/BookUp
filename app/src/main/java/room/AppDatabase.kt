@@ -15,6 +15,6 @@ abstract class AppDatabase : RoomDatabase()  {
 
 val MIGRATION_1_2: Migration = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        // Поскольку мы не изменяли таблицу, здесь больше ничего не нужно делать.
+
     }
 }
