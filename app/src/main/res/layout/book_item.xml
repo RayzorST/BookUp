@@ -19,13 +19,18 @@
 
         <!--on below line we are creating
              a simple image view-->
+
         <ToggleButton
             android:id="@+id/addFavorite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Favorite"
-            android:textOff="No"
-            android:textOn="Yes" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginEnd="76dp"
+            android:background="@drawable/toggle_star_selector"
+            android:minWidth="50dp"
+            android:minHeight="50dp"
+            android:textOff=""
+            android:textOn="" />
 
         <ImageView
             android:id="@+id/image"
