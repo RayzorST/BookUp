@@ -1,5 +1,8 @@
 package com.example.bookup
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +16,7 @@ import com.example.bookup.databinding.FragmentSearchBinding
 import database.Book
 import database.Page
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -30,20 +34,32 @@ class ReadingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         book = arguments?.getSerializable("book") as Book
+        val pageDao = localstore.pageDao()
+        val pageRep = room.repository.Page(pageDao)
         lifecycleScope.launch{
-            pageList = supabase.postgrest["Pages"].select { filter {
-                eq("book", book.id)
-                isIn("page", listOf(1, 2))
-            } }.decodeList<Page>()
-            page = pageList[0]
+            if (isOnline(this@ReadingFragment.context)){
+                pageList = supabase.postgrest["Pages"].select { filter {
+                    eq("book", book.id)
+                } }.decodeList<Page>()
+                page = pageList[0]
+
+                for (page in pageList){
+                    if (pageRep.getPage(page.id).first() == null)
+                        pageRep.addPage(Page(page.id, book.id, page.page, page.text))
+                }
+            }
+            else{
+                pageList = pageRep.getAllbyBook(book.id).first()
+                page = pageList[0]
+            }
 
             binding.apply {
                 buttonOnReadNext.setOnClickListener { nextPage() }
                 buttonOnReadBack.setOnClickListener { backPage() }
-                if(pageList.getOrNull(1) == null){
-                    buttonOnReadNext.visibility = View.GONE
+                if(pageList.getOrNull(1) != null){
+                    buttonOnReadNext.visibility = View.VISIBLE
                 }
-                buttonOnReadBack.visibility = View.GONE
+                //buttonOnReadBack.visibility = View.GONE
 
                 titleOfTheBook.text = page.page.toString()
                 readingTextPage.text = page.text.toString()
@@ -52,11 +68,22 @@ class ReadingFragment : Fragment() {
     }
 
      fun nextPage(){
+         binding.apply {
+             buttonOnReadNext.visibility = View.GONE
+             buttonOnReadBack.visibility = View.GONE
+         }
         lifecycleScope.launch{
-            pageList = supabase.postgrest["Pages"].select { filter {
-                eq("book", book.id)
-                isIn("page", listOf(page.page, page.page + 1, page.page + 2) )
-            } }.decodeList<Page>()
+            if (isOnline(this@ReadingFragment.context)){
+                pageList = supabase.postgrest["Pages"].select { filter {
+                    eq("book", book.id)
+                    isIn("page", listOf(page.page, page.page + 1, page.page + 2) )
+                } }.decodeList<Page>()
+            }
+            else{
+                val pageDao = localstore.pageDao()
+                val pageRep = room.repository.Page(pageDao)
+                pageList = pageRep.getAllbyBook(book.id).first()
+            }
             var index = pageList.indexOf(page)
             page = pageList[index + 1]
             index += 1
@@ -79,11 +106,22 @@ class ReadingFragment : Fragment() {
     }
 
     fun backPage(){
+        binding.apply {
+            buttonOnReadNext.visibility = View.GONE
+            buttonOnReadBack.visibility = View.GONE
+        }
         lifecycleScope.launch{
-            pageList = supabase.postgrest["Pages"].select { filter {
-                eq("book", book.id)
-                isIn("page", listOf(page.page, page.page - 1, page.page - 2))
-            } }.decodeList<Page>()
+            if (isOnline(this@ReadingFragment.context)){
+                pageList = supabase.postgrest["Pages"].select { filter {
+                    eq("book", book.id)
+                    isIn("page", listOf(page.page, page.page - 1, page.page - 2))
+                } }.decodeList<Page>()
+            }
+            else{
+                val pageDao = localstore.pageDao()
+                val pageRep = room.repository.Page(pageDao)
+                pageList = pageRep.getAllbyBook(book.id).first()
+            }
             var index = pageList.indexOf(page)
             page = pageList[index - 1]
             index -= 1
@@ -102,6 +140,26 @@ class ReadingFragment : Fragment() {
                     buttonOnReadBack.visibility = View.VISIBLE
             }
         }
+    }
+
+    fun isOnline(context: Context?): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     companion object {

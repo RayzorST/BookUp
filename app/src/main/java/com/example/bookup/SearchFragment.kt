@@ -1,5 +1,8 @@
 package com.example.bookup
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.bookup.databinding.FragmentSearchBinding
@@ -28,27 +32,36 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         lifecycleScope.launch {
-            val books = supabase.postgrest["Books"].select {
-                limit(10)
+            var books: List<Book>? = null
+            var bookTags: List<BookTags>? = null
+            var tags: List<Tags>? = null
+            if (isOnline(this@SearchFragment.context)){
+                books = supabase.postgrest["Books"].select {
+                    limit(10)
 
-            }.decodeList<Book>()
+                }.decodeList<Book>()
 
-            val bookDao = localstore.bookDao()
-            val bookRep = room.repository.Book(bookDao)
-            val favbooks = bookRep.getAll().first()
-            for(book in books){
-                if (favbooks.find { it.id == book.id } == null){
-                    book.isFavorite = false
+                val bookDao = localstore.bookDao()
+                val bookRep = room.repository.Book(bookDao)
+                val favbooks = bookRep.getAll().first()
+                for(book in books){
+                    if (favbooks.find { it.id == book.id } == null){
+                        book.isFavorite = false
+                    }
                 }
+
+                bookTags = supabase.postgrest["Book_Tags"].select {
+                    filter {
+                        isIn("book_id", books.map{ it.id })
+                    }
+                }.decodeList<BookTags>()
+
+                tags = supabase.postgrest["Tags"].select{}.decodeList<Tags>()
+            }
+            else{
+                Toast.makeText(this@SearchFragment.context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show()
             }
 
-            val bookTags = supabase.postgrest["Book_Tags"].select {
-                filter {
-                    isIn("book_id", books.map{ it.id })
-                }
-            }.decodeList<BookTags>()
-
-            val tags = supabase.postgrest["Tags"].select{}.decodeList<Tags>()
 
             binding.booksList.layoutManager = GridLayoutManager(null, 2)
             binding.booksList.adapter = BookAdapter(books, bookTags, tags)
@@ -69,6 +82,26 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    fun isOnline(context: Context?): Boolean {
+        val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     companion object {

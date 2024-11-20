@@ -1,5 +1,8 @@
 package com.example.bookup
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +14,7 @@ import com.example.bookup.databinding.ActivityMainBinding
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.room.Room.databaseBuilder
 import room.AppDatabase
@@ -29,7 +33,6 @@ var currentFragment: Fragment = SearchFragment.newInstance()
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
