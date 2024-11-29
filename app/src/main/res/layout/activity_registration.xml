@@ -42,7 +42,7 @@
                 android:id="@+id/loginReg"
                 android:layout_width="380dp"
                 android:layout_height="48dp"
-                android:hint="Login" />
+                android:hint="Email" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

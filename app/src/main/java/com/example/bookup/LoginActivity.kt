@@ -9,9 +9,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.bookup.databinding.ActivityLoginBinding
 import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.gotrue.providers.builtin.Email
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
@@ -27,21 +29,20 @@ class LoginActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val registrButton = findViewById<Button>(R.id.registrButton)
-        registrButton.setOnClickListener {
-            val intent = Intent(this, RegistrationActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    suspend fun login(view: View) {
         binding.apply {
-            supabase.auth.signInWith(Email) {
-                email = loginInput.text.toString()
-                password = passwordInput.text.toString()
+            registrButton.setOnClickListener {
+                startActivity(Intent(this@LoginActivity, RegistrationActivity::class.java))
             }
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+
+            LoginButton.setOnClickListener {
+                lifecycleScope.launch {
+                    supabase.auth.signInWith(Email) {
+                        email = loginInput.text.toString()
+                        password = passwordInput.text.toString()
+                    }
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                }
+            }
         }
     }
 }

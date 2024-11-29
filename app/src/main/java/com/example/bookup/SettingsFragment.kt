@@ -8,7 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import com.example.bookup.databinding.FragmentSettingsBinding
+import io.github.jan.supabase.gotrue.auth
+import kotlinx.coroutines.launch
 
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
@@ -17,12 +20,10 @@ class SettingsFragment : Fragment() {
         binding = FragmentSettingsBinding.inflate(inflater, container, false)
 
         binding.apply {
-            // Проверка текущей темы (темная или светлая)
             if (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
                 darkModeOn.isChecked = true
             }
 
-            // Установка слушателя на переключатель темной темы
             darkModeOn.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -31,11 +32,11 @@ class SettingsFragment : Fragment() {
                 }
             }
 
-            // Установка обработчика клика для текста "Log out"
             logOut.setOnClickListener {
-                // Переход на LoginActivity
-                val intent = Intent(requireContext(), LoginActivity::class.java)
-                startActivity(intent)
+                lifecycleScope.launch{
+                    supabase.auth.signOut()
+                    startActivity(Intent(requireContext(), LoginActivity::class.java))
+                }
             }
         }
 
