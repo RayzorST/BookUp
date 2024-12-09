@@ -1,5 +1,6 @@
 package com.example.bookup
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.bookup.databinding.FragmentSettingsBinding
 import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
+import com.example.bookup.MainActivity
 
 class SettingsFragment : Fragment() {
     lateinit var binding: FragmentSettingsBinding
@@ -27,8 +29,10 @@ class SettingsFragment : Fragment() {
             darkModeOn.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    setDarkMode(this@SettingsFragment.context, 2)
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    setDarkMode(this@SettingsFragment.context, 1)
                 }
             }
 
@@ -42,6 +46,14 @@ class SettingsFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    fun setDarkMode(context: Context?, darkMode: Int) {
+        val sharedPreferences = context!!.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putInt("darkMode", darkMode)
+            apply()
+        }
     }
 
     companion object {

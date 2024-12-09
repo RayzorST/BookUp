@@ -16,6 +16,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room.databaseBuilder
@@ -41,7 +42,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.e("sdf1", supabase.auth.currentSessionOrNull().toString())
         lifecycleScope.launch{
             try{
                 supabase.auth.importSession(supabase.auth.sessionManager.loadSession()!!)
@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             applicationContext,
             AppDatabase::class.java, "LocalStore"
         ).addMigrations(MIGRATION_1_2).build()
-
+        loadSettings(this@MainActivity)
         binding.apply {
             pageName.text = getString(R.string.search)
             supportFragmentManager
@@ -107,11 +107,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getSession(context: Context): Pair<String?, String?> {
-        val sharedPreferences = context.getSharedPreferences("supabase_session", Context.MODE_PRIVATE)
-        val accessToken = sharedPreferences.getString("access_token", null)
-        val refreshToken = sharedPreferences.getString("refresh_token", null)
-        return Pair(accessToken, refreshToken)
+    fun loadSettings(context: Context) {
+        val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        AppCompatDelegate.setDefaultNightMode(sharedPreferences.getInt("darkMode", 1))
     }
 
     fun open_menu(view: View){
