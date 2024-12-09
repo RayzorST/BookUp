@@ -40,7 +40,8 @@ class ReadingFragment : Fragment() {
             if (isOnline(this@ReadingFragment.context)){
                 pageList = supabase.postgrest["Pages"].select { filter {
                     eq("book", book.id)
-                } }.decodeList<Page>()
+                } }.decodeList<Page>().sortedBy { it.page }
+                Log.i("adasd", pageList.toString())
                 page = pageList[0]
 
                 for (page in pageList){
@@ -50,7 +51,7 @@ class ReadingFragment : Fragment() {
             }
             else{
                 pageList = pageRep.getAllbyBook(book.id).first()
-                page = pageList[0]
+                page = pageList.sortedBy { it.page }[0]
             }
 
             binding.apply {
@@ -72,37 +73,24 @@ class ReadingFragment : Fragment() {
              buttonOnReadNext.visibility = View.GONE
              buttonOnReadBack.visibility = View.GONE
          }
-        lifecycleScope.launch{
-            if (isOnline(this@ReadingFragment.context)){
-                pageList = supabase.postgrest["Pages"].select { filter {
-                    eq("book", book.id)
-                    isIn("page", listOf(page.page, page.page + 1, page.page + 2) )
-                } }.decodeList<Page>()
-            }
-            else{
-                val pageDao = localstore.pageDao()
-                val pageRep = room.repository.Page(pageDao)
-                pageList = pageRep.getAllbyBook(book.id).first()
-            }
-            var index = pageList.indexOf(page)
-            page = pageList[index + 1]
-            index += 1
+         var index = pageList.indexOf(page)
+         page = pageList[index + 1]
+         index += 1
 
-            binding.apply {
-                titleOfTheBook.text = page.page.toString()
-                readingTextPage.text = page.text.toString()
+         binding.apply {
+             titleOfTheBook.text = page.page.toString()
+             readingTextPage.text = page.text.toString()
 
-                if(pageList.getOrNull(index + 1) == null)
-                    buttonOnReadNext.visibility = View.GONE
-                else
-                    buttonOnReadNext.visibility = View.VISIBLE
-                if(pageList.getOrNull(index - 1) == null)
-                    buttonOnReadBack.visibility = View.GONE
-                else
-                    buttonOnReadBack.visibility = View.VISIBLE
+             if(pageList.getOrNull(index + 1) == null)
+                 buttonOnReadNext.visibility = View.GONE
+             else
+                 buttonOnReadNext.visibility = View.VISIBLE
+             if(pageList.getOrNull(index - 1) == null)
+                 buttonOnReadBack.visibility = View.GONE
+             else
+                 buttonOnReadBack.visibility = View.VISIBLE
 
-            }
-        }
+         }
     }
 
     fun backPage(){
@@ -110,35 +98,22 @@ class ReadingFragment : Fragment() {
             buttonOnReadNext.visibility = View.GONE
             buttonOnReadBack.visibility = View.GONE
         }
-        lifecycleScope.launch{
-            if (isOnline(this@ReadingFragment.context)){
-                pageList = supabase.postgrest["Pages"].select { filter {
-                    eq("book", book.id)
-                    isIn("page", listOf(page.page, page.page - 1, page.page - 2))
-                } }.decodeList<Page>()
-            }
-            else{
-                val pageDao = localstore.pageDao()
-                val pageRep = room.repository.Page(pageDao)
-                pageList = pageRep.getAllbyBook(book.id).first()
-            }
-            var index = pageList.indexOf(page)
-            page = pageList[index - 1]
-            index -= 1
+        var index = pageList.indexOf(page)
+        page = pageList[index - 1]
+        index -= 1
 
-            binding.apply {
-                titleOfTheBook.text = page.page.toString()
-                readingTextPage.text = page.text.toString()
+        binding.apply {
+            titleOfTheBook.text = page.page.toString()
+            readingTextPage.text = page.text.toString()
 
-                if(pageList.getOrNull(index + 1) == null)
-                    buttonOnReadNext.visibility = View.GONE
-                else
-                    buttonOnReadNext.visibility = View.VISIBLE
-                if(pageList.getOrNull(index - 1) == null)
-                    buttonOnReadBack.visibility = View.GONE
-                else
-                    buttonOnReadBack.visibility = View.VISIBLE
-            }
+            if(pageList.getOrNull(index + 1) == null)
+                buttonOnReadNext.visibility = View.GONE
+            else
+                buttonOnReadNext.visibility = View.VISIBLE
+            if(pageList.getOrNull(index - 1) == null)
+                buttonOnReadBack.visibility = View.GONE
+            else
+                buttonOnReadBack.visibility = View.VISIBLE
         }
     }
 

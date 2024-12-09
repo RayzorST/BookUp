@@ -37,7 +37,7 @@ class SearchFragment : Fragment() {
             var tags: List<Tags>? = null
             if (isOnline(this@SearchFragment.context)){
                 books = supabase.postgrest["Books"].select {
-                    limit(10)
+                    limit(14)
 
                 }.decodeList<Book>()
 
