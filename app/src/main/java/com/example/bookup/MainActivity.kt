@@ -40,12 +40,17 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (supabase.auth.currentSessionOrNull() == null){
-            startActivity(Intent(this, LoginActivity::class.java))
-            return
+        super.onCreate(savedInstanceState)
+        Log.e("sdf1", supabase.auth.currentSessionOrNull().toString())
+        lifecycleScope.launch{
+            try{
+                supabase.auth.importSession(supabase.auth.sessionManager.loadSession()!!)
+            }
+            catch (e: NullPointerException){
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            }
         }
 
-        super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -100,6 +105,13 @@ class MainActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    fun getSession(context: Context): Pair<String?, String?> {
+        val sharedPreferences = context.getSharedPreferences("supabase_session", Context.MODE_PRIVATE)
+        val accessToken = sharedPreferences.getString("access_token", null)
+        val refreshToken = sharedPreferences.getString("refresh_token", null)
+        return Pair(accessToken, refreshToken)
     }
 
     fun open_menu(view: View){

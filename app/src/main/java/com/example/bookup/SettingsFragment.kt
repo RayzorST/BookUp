@@ -34,6 +34,7 @@ class SettingsFragment : Fragment() {
 
             logOut.setOnClickListener {
                 lifecycleScope.launch{
+                    supabase.auth.sessionManager.deleteSession()
                     supabase.auth.signOut()
                     startActivity(Intent(requireContext(), LoginActivity::class.java))
                 }

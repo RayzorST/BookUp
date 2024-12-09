@@ -1,7 +1,9 @@
 package com.example.bookup
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -12,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.bookup.databinding.ActivityLoginBinding
 import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.exception.AuthRestException
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import kotlinx.coroutines.launch
 
@@ -36,13 +39,29 @@ class LoginActivity : AppCompatActivity() {
 
             LoginButton.setOnClickListener {
                 lifecycleScope.launch {
-                    supabase.auth.signInWith(Email) {
-                        email = loginInput.text.toString()
-                        password = passwordInput.text.toString()
+                    try{
+                        supabase.auth.signInWith(Email) {
+                            email = loginInput.text.toString()
+                            password = passwordInput.text.toString()
+                        }
+                        Log.e("sdf", supabase.auth.currentSessionOrNull().toString())
+                        supabase.auth.sessionManager.saveSession(supabase.auth.currentSessionOrNull()!!)
+                        startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                     }
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    catch (e: AuthRestException){
+                        Toast.makeText(this@LoginActivity, "Такого пользователя нет", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
+        }
+    }
+
+    fun saveSession(context: Context, accessToken: String, refreshToken: String) {
+        val sharedPreferences = context.getSharedPreferences("supabase_session", Context.MODE_PRIVATE)
+        with(sharedPreferences.edit()) {
+            putString("access_token", accessToken)
+            putString("refresh_token", refreshToken)
+            apply()
         }
     }
 }
