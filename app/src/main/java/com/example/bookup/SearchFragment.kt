@@ -69,10 +69,24 @@ class SearchFragment : Fragment() {
             binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     binding.searchView.clearFocus()
+                    if (query.isNullOrEmpty()){
+                        binding.booksList.adapter = BookAdapter(books, bookTags, tags)
+                    }
+                    else{
+                        binding.booksList.adapter = BookAdapter(books!!.filter { query!!.lowercase() in it.title.lowercase() }, bookTags, tags)
+                    }
+                    books!!.find { it.title.lowercase() == query!!.lowercase() }
                     return false
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty()){
+                        binding.booksList.adapter = BookAdapter(books, bookTags, tags)
+                    }
+                    else{
+                        binding.booksList.adapter = BookAdapter(books!!.filter { newText!!.lowercase() in it.title.lowercase() }, bookTags, tags)
+                    }
+
                     return false
                 }
             })
