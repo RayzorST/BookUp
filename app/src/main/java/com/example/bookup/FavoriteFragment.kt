@@ -32,7 +32,7 @@ class FavoriteFragment : Fragment() {
 
         lifecycleScope.launch{
             binding.booksList.layoutManager = GridLayoutManager(null, 2)
-            binding.booksList.adapter = BookAdapter(bookRep.getAll().first(), listOf(BookTags(0, 0, 0)), listOf(Tags(0, "safasf")))
+            binding.booksList.adapter = BookAdapter(bookRep.getAll().first(), listOf(BookTags(0, 0, 0)), listOf())
         }
     }
 

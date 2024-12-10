@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import database.Book
 import database.BookTags
 import database.Page
@@ -23,8 +24,9 @@ import kotlinx.coroutines.launch
 import kotlin.math.exp
 
 class BookAdapter (private var bookList: List<Book>?, private  var tagBookList: List<BookTags>?, private var tagList: List<Tags>?) : RecyclerView.Adapter<BookAdapter.BookViewHolder>() {
+    lateinit var itemView: View
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookAdapter.BookViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.book_item, parent, false)
+        itemView = LayoutInflater.from(parent.context).inflate(R.layout.book_item, parent, false)
         return BookAdapter.BookViewHolder(itemView)
     }
 
@@ -37,6 +39,11 @@ class BookAdapter (private var bookList: List<Book>?, private  var tagBookList: 
             tagsString += tagList!!.find { it.id == tag }?.name.toString() + " "
         }
         holder.tags.text = tagsString
+
+        Glide.with(itemView)
+            .load(book.image)
+            .error(R.drawable.i)
+            .into(holder.image)
 
         if (book.isFavorite){
             holder.isFavorite.isChecked = true
@@ -58,7 +65,7 @@ class BookAdapter (private var bookList: List<Book>?, private  var tagBookList: 
             val bookDao = localstore.bookDao()
             val bookRep = room.repository.Book(bookDao)
             if (isChecked){
-                bookRep.addBook(Book(book.id, book.title, book.description))
+                bookRep.addBook(Book(book.id, book.title, book.description, book.image))
             }
             else{
                 bookRep.deleteBook(Book(book.id))

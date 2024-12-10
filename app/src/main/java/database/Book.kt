@@ -13,5 +13,6 @@ data class Book (
     @PrimaryKey var id: Int = 0,
     @ColumnInfo var title: String = "",
     @ColumnInfo var description: String = "",
+    @ColumnInfo var image: String = "",
     @Ignore var isFavorite: Boolean = true,
 ) : Serializable
