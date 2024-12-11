@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
             AppDatabase::class.java, "LocalStore"
         ).addMigrations(MIGRATION_1_2).build()
         loadSettings(this@MainActivity)
-        (findViewById(R.id.textView) as TextView)
         binding.apply {
             pageName.text = getString(R.string.search)
             supportFragmentManager
