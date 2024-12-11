@@ -16,7 +16,22 @@ abstract class AppDatabase : RoomDatabase()  {
     abstract fun pageDao(): PageDao
 }
 
-val MIGRATION_1_2: Migration = object : Migration(4, 5) {
+val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+    }
+}
+
+val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+    }
+}
+
+val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+    }
+}
+
+val MIGRATION_4_5: Migration = object : Migration(4, 5) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL("ALTER TABLE 'book' ADD COLUMN 'image' TEXT NOT NULL default 'abc'")
     }

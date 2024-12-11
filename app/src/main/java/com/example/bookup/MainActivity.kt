@@ -27,6 +27,9 @@ import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
 import room.AppDatabase
 import room.MIGRATION_1_2
+import room.MIGRATION_2_3
+import room.MIGRATION_3_4
+import room.MIGRATION_4_5
 
 public val supabase = createSupabaseClient(
     supabaseUrl = "https://pjcbtzavgyvcxluvdosy.supabase.co",
@@ -65,7 +68,10 @@ class MainActivity : AppCompatActivity() {
         localstore = databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "LocalStore"
-        ).addMigrations(MIGRATION_1_2).build()
+        ).addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_3_4)
+            .addMigrations(MIGRATION_4_5).build()
         loadSettings(this@MainActivity)
         binding.apply {
             pageName.text = getString(R.string.search)
