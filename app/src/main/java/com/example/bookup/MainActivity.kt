@@ -16,10 +16,12 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room.databaseBuilder
+import com.example.bookup.databinding.NavigationHeaderBinding
 import io.github.jan.supabase.gotrue.Auth
 import io.github.jan.supabase.gotrue.auth
 import kotlinx.coroutines.launch
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             AppDatabase::class.java, "LocalStore"
         ).addMigrations(MIGRATION_1_2).build()
         loadSettings(this@MainActivity)
+        (findViewById(R.id.textView) as TextView)
         binding.apply {
             pageName.text = getString(R.string.search)
             supportFragmentManager
